@@ -15,6 +15,10 @@
       body {
         font-family: "Ubuntu", sans-serif;
         background: #f1d998;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
       }
       #appWrap {
         width: 95%;
@@ -91,7 +95,7 @@
               <div id="innerbox">
                 <h1>Random Quote Machine</h1>
                 <h3 id="text">{this.state.quote}</h3>
-                <h5 id="author">{this.state.author}</h5>
+                <h5 id="author">#{this.state.author}</h5>
                 <button id="new-quote" onClick={this.onChange}>
                   Next Quote
                 </button>

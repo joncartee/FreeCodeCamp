@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Markdown Editor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap"
+      rel="stylesheet"
+    />
+
+    <style class="">
+      body {
+        font-family: "Ubuntu", sans-serif;
+        background: #f1d998;
+      }
+      #appWrap {
+        width: 95%;
+        margin: 1% auto;
+        padding: 1% 0;
+        background: #92b2b5;
+        border-radius: 5px;
+      }
+      #app {
+        width: 95%;
+        margin: 1% auto;
+        padding: 1% 0;
+      }
+      #editor {
+        width: 100%;
+        resize: vertical;
+        min-height: 250px;
+        border-radius: 5px;
+      }
+      #preview {
+        width: 100%;
+        resize: vertical;
+        min-height: 250px;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="appWrap"></div>
+    <script type="text/babel">
+      marked.setOptions({
+        breaks: true,
+        gsm: true
+      });
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            text: placeholder
+          };
+          this.onChange = this.onChange.bind(this);
+        }
+
+        onChange(e) {
+          this.setState({ text: e.target.value });
+          let x = e.target.value;
+          x = x.replace(/\r/gm, "\r");
+          this.setState({ markdown: x });
+        }
+
+        render() {
+          return (
+            <div id="app">
+              <h1 class="">Markdown Previewer</h1>
+              <textarea
+                id="editor"
+                name="markdown"
+                value={this.state.text}
+                onChange={this.onChange}
+              ></textarea>
+              <div
+                id="preview"
+                onLoad={this.onChange}
+                dangerouslySetInnerHTML={{ __html: marked(this.state.text) }}
+              ></div>
+            </div>
+          );
+        }
+      }
+      const placeholder = `# Markdown Previewer
+## This will preview markdown in Text format
+
+### What is markdown?
+A simplified formatting language for creating content. Not as feature rich as a Word program but allowing the creator to style for html, documentation very quickly. The goal is broad support with readable formatting syntax.
+
+**From the creator of markdown**,
+> The overriding design goal for Markdown's formatting syntax is to make it as readable as possible. The idea is that a Markdown-formatted document should be publishable as-is, as plain text, without looking like it's been marked up with tags or formatting instructions.
+
+### How does this page work?
+This page is importing the js module Marked.js and using that generate html. That html is placed as innerHTML in a div and the brower renders it.
+The heavy lifting is completed by the Marked.js team.
+My role in this is using this tool to complete this objective [Front End Libraries Projects - Build a Markdown Previewer](https://www.freecodecamp.org/learn/front-end-libraries/front-end-libraries-projects/build-a-markdown-previewer).
+
+### How to install Marked
+\`npm install -g marked\`
+
+
+### Syntax
+#### Details
+\\ The single backslash is used to excape characters. There are two here in the editor, and one in the preview because it is escaping itself allowing it to be viewed.
+
+If you want to start a new paragraph, or section you will need to have two new lines or \n. This means you press enter twice.
+
+
+#### Basic Syntax
+##### Headers
+# # h1
+## ## h2
+### ### h3
+#### #### h4
+##### ##### h5
+###### ###### h6
+
+
+##### Font Stylings
+**\*\*bold text\*\***
+
+*italicized text*
+##### Lists
+##### Unordered
+- \- Two
+- \- Four
+- \- Three
+- \- One
+
+##### Ordered
+1. One
+2. Two
+3. Three
+4. Four
+
+
+##### Code
+inline \`code\` has backticks around it 
+
+\`\`\`
+code block 
+\`\`\`
+
+
+##### Horizontal Rule
+\---
+
+
+##### Link
+\[[https://www.example.com](https://www.example.com)]\(example)
+
+
+##### Image
+!\[alt text]\(image.jpg)
+
+
+![Jon Cartee](https://i.imgur.com/4Vi5o9Z.jpg?1)`;
+
+      ReactDOM.render(<App />, document.getElementById("appWrap"));
+    </script>
+  </body>
+</html>

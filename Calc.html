@@ -158,7 +158,11 @@
 
         pressedKey(x){
           console.log(x)
+          let dis = this.state.display
+          if(dis == "0" && x == "0"){this.setState({display:"0"})}else{
+          
           this.setState({display:this.removeLeadingZeros(this.state.display+x)})
+          }
         }
 
         pressedDelete(){

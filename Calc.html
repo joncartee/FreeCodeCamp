@@ -96,36 +96,67 @@
   <div id="appWrap"></div>
   <script type="text/babel">
 
-      class App extends React.Component {
+class App extends React.Component {
         constructor(props) {
           super(props);
           this.state = {
-            display: "",
-            keylist : [49,50,51,52,53,54,55,56,57,48,189,187,96,97,98,99,100,101,102,103,104,105,109] 
+            display: "0",
+            input:"",
+            stored:"",
+            keyCode:"",
+            keys:{
+              numList : [49,50,51,52,53,54,55,56,57,48,96,97,98,99,100,101,102,103,104,105],
+              enter:[13, 187],
+              add:[107],
+              minus:[109, 189],
+              divide:[111],
+              multiply:[106],
+              decimal:[110],
+              backspace:[8],
+              delete:[46]
+            }
 
           };
           this.clicked = this.clicked.bind(this);
-          this.onChange = this.onChange.bind(this);
           this.handleKeyPress = this.handleKeyPress.bind(this);
         }
-
         componentDidMount() {
           document.addEventListener("keydown", this.handleKeyPress);
         }
         componentWillUnmount() {
           document.removeEventListener("keydown", this.handleKeyPress);
         }
+        clicked(e) {
+          console.log(e.target.value)
+          if (e.target.value === "") {this.delete()}
+          else if (e.target.value === "-"){this.minus(e.target.value)} 
+          else if (e.target.value === "+"){this.operators(e.target.value)} 
+          else if (e.target.value === "*"){this.operators(e.target.value)} 
+          else if (e.target.value === "/"){this.operators(e.target.value)} 
+          else if (e.target.value === "."){this.decimal()} 
+          else if (e.target.value === "="){this.enter(this.state.display)} 
+          else {this.numkeys(e.target.value)}
+        }
 
         handleKeyPress(e) {
           console.log(e.keyCode)
-          if (this.state.keylist.indexOf(e.keyCode)>=0) { this.pressedKey(keyboardMap[e.keyCode])}
-          else if([106,107,111].indexOf(e.keyCode)>=0){this.operators(keyboardMap[e.keyCode])}
-          else if([13].indexOf(e.keyCode)>=0){this.calc(this.state.display)}
-          else if([46].indexOf(e.keyCode)>=0){this.pressedDelete()}
-          else if([110].indexOf(e.keyCode)>=0){this.pressedDecimal()}
-          else if([8].indexOf(e.keyCode)>=0){this.pressedBackspace()}
-            };
-    
+          if (this.state.keys.numList.indexOf(e.keyCode)>=0) { this.numkeys(keyboardMap[e.keyCode])}
+          else if(this.state.keys.minus.indexOf(e.keyCode)>=0){this.minus(keyboardMap[e.keyCode])} //needs specific ops added 
+          else if(this.state.keys.add.indexOf(e.keyCode)>=0){this.operators(keyboardMap[e.keyCode])}
+          else if(this.state.keys.multiply.indexOf(e.keyCode)>=0){this.operators(keyboardMap[e.keyCode])}
+          else if(this.state.keys.divide.indexOf(e.keyCode)>=0){this.operators(keyboardMap[e.keyCode])}  
+          else if(this.state.keys.decimal.indexOf(e.keyCode)>=0){this.decimal()}         
+          else if(this.state.keys.enter.indexOf(e.keyCode)>=0){this.enter(this.state.display)}
+          else if(this.state.keys.delete.indexOf(e.keyCode)>=0){this.delete()}
+          else if(this.state.keys.backspace.indexOf(e.keyCode)>=0){this.backspace()}
+        };
+        numkeys(x){
+            console.log(x)
+            let dis = this.state.display
+            if(dis == "0" && x == "0"){this.setState({display:"0"})}else{
+              this.setState({display:this.removeLeadingZeros(this.state.display+x)})
+            }
+          }
         removeLeadingZeros(x){
           x=x.replace(/(^[0]{0,}(?![\.]))/gi,"")
         return x
@@ -135,66 +166,53 @@
           let reg = /([\+\-\*\/])$/
           let flag = reg.test(dis)
           console.log("Reg is ",reg," and string is ", dis ," and test result is ", flag)
-          console.log("Reg is ",reg," and string is ", dis )
-          if(flag===false){
-          this.setState({display:this.removeLeadingZeros(this.state.display+x)})
-          }else{
-
+          while (reg.test(dis)===true){
           let name = this.state.display
-          name = name.substring(0,name.length-1)
-          name = name+x
-          console.log(name)
-          this.setState({display:name})
+          console.log(dis)
+          dis = dis.substring(0,dis.length-1)
+          } 
+          dis+=x     
+          this.setState({display:this.removeLeadingZeros(dis)})
           }
+        minus(x){
+          let dis = this.state.display
+          dis += x
+          let reg = /([-]{0,1})$/
+          let flag = reg.test(dis)
+          if(flag===false){
+            dis = dis.replace("-","")
+            dis+="-"
+            }
+            this.setState({display:dis})
+          console.log("Reg is ",reg," and string is ", dis ," and test result is ", flag)
+
         }
 
-        pressedDecimal(){
+        decimal(){
           let x= this.state.display
           let reg = /(^([0-9]+)$)|([\/\+\-\*])([0-9]+)$/
           let y = reg.test(x)
-          console.log("NoDecimalEvaluated: ",x, " as ", y)
-          if(y===true){this.pressedKey('.')}
+          console.log("Reg is ",reg," and string is ", x ," and test result is ", y)
+          if(y===true){this.numkeys('.')}
         }
-
-        pressedKey(x){
-          console.log(x)
-          this.setState({display:this.removeLeadingZeros(this.state.display+x)})
+        enter(x){
+          console.log("Enter Pressed: ",x,"=", eval(x))
+          this.setState({display:eval(x)})
         }
-
-        pressedDelete(){
+        delete(){
           this.setState({display:"0"})
-          console.log("Delete Pressed ")
+          console.log("Delete ")
         }
-
-        pressedBackspace(){
+        backspace(){
           let x = this.state.display
           this.setState({display:x.substring(0,x.length-1)})
           console.log("Backspace")
         }
-        
-        onChange(e) {
-          this.setState({
-            display: e.target.value
-          });
-        }
-        calc(x){
-          console.log("Enter Pressed: ",x,"=", eval(x))
-          this.setState({display:eval(x)})
-        }
-
-        clicked(e) {
-          console.log(e.target.value)
-          if (e.target.value === "") {this.pressedDelete()}
-          else if (e.target.value === "="){this.calc(this.state.display)} 
-          else {this.pressedKey(e.target.value)}
-        }
-
-        render() {
+       render() {
           return (
             <div id="app">
-              <div
+               <div
                 id="display"
-          
                 onChange={this.onChange}
               >{this.state.display}</div>
               <div id="topdiv">
@@ -604,7 +622,8 @@
   "" // [255]
 ];
 
-      ReactDOM.render(<App />, document.getElementById("appWrap"));
+ReactDOM.render(<App />, document.getElementById("appWrap"));
+   
     </script>
 </body>
 

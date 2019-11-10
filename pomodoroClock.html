@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>React Page</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <meta charset="UTF-8" />
+
+  <style className="">
+    body {
+      font-family: "Ubuntu", sans-serif;
+      background: #f1d998;
+    }
+
+    #appWrap {
+      width: 50vw;
+      margin: 1% auto;
+      padding: 1% 0;
+      background: #92b2b5;
+      border-radius: 5px;
+    }
+
+    #app {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #control {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #timer {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #session-label {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #break-label {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #credit {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .title {
+      width: 100%
+    }
+  </style>
+</head>
+
+<body>
+  <div id="appWrap"></div>
+  <script type="text/babel">
+
+    class App extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          state: false,
+          breakLength: 5,
+          sessionLength: 25,
+          timerLabel: "session",
+          timeLeft: 25,
+        };
+        this.startstop = this.startstop.bind(this);
+        this.moreSession = this.moreSession.bind(this);
+        this.lessSession = this.lessSession.bind(this);
+        this.moreBreak = this.moreBreak.bind(this);
+        this.lessBreak = this.lessBreak.bind(this);
+        this.reset = this.reset.bind(this);
+
+      }
+
+      startstop() {
+        let x = this.state.state
+        if (x === false) {
+          console.log("Timer Started")
+          this.setState({ state: true })
+          this.timer = setInterval(() => { this.updateTime() }, 1000)
+        } else {
+          console.log("Timer Stopped")
+          this.setState({ state: false })
+          clearInterval(this.timer)
+        }
+      }
+
+      updateTime() {
+        let x = this.state.timeLeft
+        const y = (1 / 60)
+        x = x - y
+        this.setState({ timeLeft: x })
+      }
+
+      moreSession() {
+        console.log("Increased Session by 1")
+        let x = this.state.sessionLength
+        this.setState({ sessionLength: this.lessThan(x) })
+      }
+      lessSession() {
+        console.log("Decreased Session by 1")
+        let x = this.state.sessionLength
+        this.setState({ sessionLength: this.moreThan(x) })
+      }
+      moreBreak() {
+        console.log("Increased Break by 1")
+        let x = this.state.breakLength
+        this.setState({ breakLength: this.lessThan(x) })
+      }
+      lessBreak() {
+        console.log("Decreased Break by 1")
+        let x = this.state.breakLength
+        this.setState({ breakLength: this.moreThan(x) })
+      }
+      lessThan(x) {
+        return x < 60 ? x + 1 : 60
+      }
+      moreThan(x) {
+        return x > 1 ? x - 1 : 1
+      }
+
+
+      reset() {
+        console.log("reset")
+      }
+
+      onChange(e) {
+        this.setstate({});
+      }
+      clocks(x) {
+        let min = Math.floor(x)
+        let sec = (((((x - min) * 60) / 100).toFixed(2)) * 100).toFixed(0)
+        if (sec < 10) { sec = "0" + sec }
+        return <span>{min}:{sec}</span>
+      }
+
+      render() {
+        return (
+          <div id="app">
+            <div id="title"></div>
+            <div id="control">
+              <div id="start_stop" onClick={this.startstop}>&#9658;</div>
+              <div id="reset" onClick={this.reset}>reset</div>
+            </div>
+            <div id="timer">
+              <div id="timer-label">
+                {this.state.timerLabel}
+
+              </div>
+              < p id="time-left" >{this.clocks(this.state.timeLeft)}</p>
+            </div>
+            <div id="session-label">
+              <div className='title'>
+                Session Length
+              </div>
+              <div id="session-decrement" onClick={this.lessSession}>lessSession</div>
+              <div id="session-length">{this.state.sessionLength}</div>
+              <div id="session-increment" onClick={this.moreSession}>moreSession</div>
+            </div>
+            <div id="break-label">
+              <div className='title'>
+                Break Length
+              </div>
+
+              <div id="break-decrement" onClick={this.lessBreak}>lessBreak</div>
+              <div id="break-length">{this.state.breakLength}</div>
+              <div id="break-increment" onClick={this.moreBreak}>moreBreak</div>
+            </div>
+            <div id="credit"></div>
+          </div >
+        );
+      }
+    }
+    let clock = {
+      breakLength: 5,
+      sessionLength: 25,
+      timerLabel: "",
+      timeLeft: "",
+    }
+    ReactDOM.render(<App />, document.getElementById("appWrap"));
+  </script>
+</body>
+
+</html>

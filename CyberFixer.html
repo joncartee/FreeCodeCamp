@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>React Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+    <link rel="stylesheet" href="https://infallible-noether-f63348.netlify.com/bootstrap-4.3.1-dist/css/bootstrap.css" class="">
+    <meta charset="UTF-8" />
+
+    <style class="">
+      body {
+        font-family: "Ubuntu", sans-serif;
+
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid d-flex justify-content-center bg-primary text-white align-items-center  min-vh-100" id="appWrap"></div>
+    <script type="text/babel">
+
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {};
+          this.onChange = this.onChange.bind(this);
+        }
+
+        onChange(e) {
+          this.setstate({});
+        }
+
+        render() {
+          return (
+            <div className="d-flex flex-column align-items-center border rounded min-vw-50 min-vh-50 justify-content-center" id="app">
+             <div className="w-75">
+              <h1 className="row" >CyberFixer </h1>
+              <div className="row">
+                Like a Healer, your vocation has to do with saving as many lives as possible but like a Greaser, you need a deep electrical and mechanical knowledge. What do you do for a living? You graft mechanical parts to flesh and bone to give the people of the Apocalypse a chance to see, hear, walk, and be able to be useful to the community once again. You are a CyberFixer.
+Your clinic consists most probably of a rusty stainless steel slab with a workbench filled with various tools: scalpel, bone saw, soldering iron, staple gun and even a bottle of moonshine to disinfect and numb your mind for the gory mess you’re about to make.
+
+              </div>
+              <br />
+              <br />
+              <ul className="align-items-left">
+              <h3>Skills</h3> 
+                <li>Persuade 1</li>
+                <li>Notice 1</li>
+                <li>Scavenge 2</li>
+                <li>Tech 1 </li>
+                <li></li>
+                </ul>
+             </div>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<App />, document.getElementById("appWrap"));
+    </script>
+  </body>
+</html>

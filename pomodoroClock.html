@@ -16,7 +16,6 @@
   <div class="row container-fluid d-flex flex-column min-vh-100 align-items-center justify-content-center" id="appWrap">
   </div>
   <script type="text/babel">
-
     class App extends React.Component {
       constructor(props) {
         super(props);
@@ -34,13 +33,13 @@
         this.moreBreak = this.moreBreak.bind(this);
         this.lessBreak = this.lessBreak.bind(this);
         this.reset = this.reset.bind(this);
-
       }
-
       startstop() {
         let x = this.state.state
         if (x === false) {
           console.log("Timer Started")
+          console.log("Time Left: ", this.state.timeLeft)
+
           this.setState({ state: true })
           this.timer = setInterval(() => { this.updateTime() }, 1000)
         } else {
@@ -49,15 +48,18 @@
           clearInterval(this.timer)
         }
       }
-
       updateTime() {
         let x = this.state.timeLeft
         const y = 1
+        console.log("Update Time Timeleft: ", x)
         x = (x - y).toFixed(2)
-        this.almostUp(x)
-        this.setState({ timeLeft: x })
+        console.log("Update Time x-y: ", x)
+        if (x >= 0) {
+          this.almostUp(x)
+          this.setState({ timeLeft: x })
+          if (x < 0 && this.state.timerLabel == "session") { this.setState({ timeLeft: 300 }) }
+        }
       }
-
       moreSession() {
         console.log("Increased Session by 1")
         let x = this.state.sessionLength
@@ -84,8 +86,6 @@
       moreThan(x) {
         return x > 60 ? x - 60 : 60
       }
-
-
       reset() {
         console.log("reset")
         this.setState({
@@ -94,52 +94,43 @@
           sessionLength: 1500,
           timerLabel: "session",
           timeLeft: 1500,
+          bgk: "#144CEB"
         })
       }
-
       onChange(e) {
         this.setstate({});
       }
-
       almostUp(x) {
         if (x < 10 && this.state.bkg === "#144CEB") { this.setState({ bkg: "#FB7873" }) }
         if (x >= 10 && this.state.bkg === "#FB7873") { this.setState({ bkg: "#144CEB" }) }
         if (x <= 0) {
-          console.log("Less Than 0")
+          console.log("Almost Up Arg: ", x)
+          console.log("Less Than Zero")
           this.startstop()
           if (this.state.timerLabel === "session") {
-            console.log(this.state.timeLeft)
-            console.log(this.state.state)
-            console.log(this.state.breakLength)
-            let bl = this.state.breakLength
-            this.setState({
-              state: true,
-              timeLeft: bl
-            })
-            console.log(this.state.timeLeft)
-            this.startstop()
-          } else {
-            let sl = this.state.sessionLength
             this.setState({
               state: false,
-              timeLeft: sl
+              timerLabel: "break",
+              timeLeft: this.state.breakLength,
+              bgk: "#144CEB"
             })
-            this.startstop()
+          } else {
+            this.setState({
+              state: false,
+              timerLabel: "session",
+              timeLeft: this.state.sessionLength,
+              bgk: "#144CEB"
+            })
           }
+          this.startstop()
         }
-
       }
-
-
       clocks(x) {
         let min = Math.floor(x / 60)
         let sec = x - min * 60
-
         if (sec < 10) { sec = "0" + sec }
         return <span>{min}:{sec}</span>
       }
-
-
       render() {
         return (
           <div id="app" className="align-items-center justify-content-center min-vw-75" >
@@ -161,7 +152,6 @@
                   <button className="lengthControl btn btn-primary" id="session-increment" onClick={this.moreSession}>+</button>
                 </div>
               </div>
-
               <div className="justify-content-center m-2" id="break-label ">
                 <div className='title row justify-content-center'>
                   Control

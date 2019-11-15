@@ -6,13 +6,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
     <link rel="stylesheet" href="https://infallible-noether-f63348.netlify.com/bootstrap-4.3.1-dist/css/bootstrap.css" class="">
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700%7CKadwa:400,700" rel="stylesheet">
     <meta charset="UTF-8" />
 
     <style class="">
-      body {
-        font-family: "Ubuntu", sans-serif;
 
-      }
 
 
     </style>
@@ -20,6 +18,24 @@
   <body>
     <div class="container-fluid d-flex justify-content-center bg-primary text-white align-items-center  min-vh-100" id="appWrap"></div>
     <script type="text/babel">
+    class Skill extends React.Component{
+      constructor(props) {
+          super(props);
+          this.state = {};
+          this.onClick = this.onClick.bind(this);
+        }
+        onClick(){
+          console.log("clicked")
+        }
+        render(){
+          return (
+            <div className="row align-items-between ">
+            <button className="btn btn-primary" onClick={this.onClick}>+
+            </button>
+            </div>
+          )
+        }
+    }
 
       class App extends React.Component {
         constructor(props) {
@@ -50,9 +66,20 @@ Your clinic consists most probably of a rusty stainless steel slab with a workbe
                 <li>Notice 1</li>
                 <li>Scavenge 2</li>
                 <li>Tech 1 </li>
-                <li></li>
+                <li>Heal 1</li>
                 </ul>
+                <abbr title="Prerequisite: CyberOptic System
+Benefits: This addition to the CyberOptic System allows a character to see heat sources as a gradient going from dark blue (Coldest) to white (Hottest). The character can virtually see other people through light structural materials or see if someone has cyberware on him (since it would radiate as a dark blue zones on a bright orange silhouette).
+Random Flaw (One die): 1-2 Cosmetic Flaw, 3 Dull Sense, 4-5 Optic Glitch, 6 Vertigo
+Possible Traits: Goggles seamlessly grafted over the eyes of the character.
+">Thermographic Vision</abbr>
              </div>
+            <div>
+Weapons: Bow or Crossbow of choice (and 12 arrows/bolts) or handgun of choice (fully loaded), knife.
+Clothing: Pants or skirt, shoes or boots, shirt or vest, coat or jacket or cloak, hat or hood.
+Gear: Utility belt with various spare parts to fix cyberware, leather doctor’s bag or first aid box; assorted basic medical and mechanic’s tools and supplies (scalpels, bone saw, needles and thread, bandages, mechanical oil, bottle of moonshine, etc.).
+Cyberware: 1-2 None, 3-4 CyberOptic System with Two Add-Ons, 5-6 One Basic Cyberware with Two Add-Ons
+</div>
             </div>
           );
         }

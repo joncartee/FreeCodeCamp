@@ -1,66 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <title>Markdown Editor</title>
+    <link
+      rel="stylesheet"
+      href="https://style.j7c5.com/bootstrap-4.3.1-dist/css/bootstrap.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <meta charset="UTF-8" />
 
-<head>
-  <title>Markdown Editor</title>
-  <link rel="stylesheet" href="https://infallible-noether-f63348.netlify.com/bootstrap-4.3.1-dist/css/bootstrap.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  </head>
 
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <body>
+    <div
+      class="row container-fluid d-flex flex-column min-vh-100 align-items-center bg-info justify-content-center"
+      id="appWrap"
+    ></div>
+    <script type="text/babel">
+      marked.setOptions({
+        breaks: true,
+        gsm: true
+      });
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            text: placeholder
+          };
+          this.onChange = this.onChange.bind(this);
+        }
 
-</head>
+        onChange(e) {
+          this.setState({ text: e.target.value });
+          let x = e.target.value;
+          x = x.replace(/\r/gm, "\r");
+          this.setState({ markdown: x });
+        }
 
-<body>
-  <div class="row container-fluid d-flex flex-column min-vh-100 align-items-center bg-info justify-content-center"
-    id="appWrap">
-  </div>
-  <script type="text/babel">
-    marked.setOptions({
-      breaks: true,
-      gsm: true
-    });
-    class App extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = {
-          text: placeholder
-        };
-        this.onChange = this.onChange.bind(this);
-      }
-
-      onChange(e) {
-        this.setState({ text: e.target.value });
-        let x = e.target.value;
-        x = x.replace(/\r/gm, "\r");
-        this.setState({ markdown: x });
-      }
-
-      render() {
-        return (
-          <div className="justify-content-center flex-column container-fluid" id="app">
-            <h1 className="align-self-center text-white">Markdown Previewer</h1>
-            <textarea
-              className="rounded container-fluid min-vh-50 bg-primary text-white"
-              id="editor"
-              name="markdown"
-              value={this.state.text}
-              onChange={this.onChange}
-            ></textarea>
+        render() {
+          return (
             <div
-              className="rounded bg-light text-dark p-2"
-              id="preview"
-              onLoad={this.onChange}
-              dangerouslySetInnerHTML={{ __html: marked(this.state.text) }}
-            ></div>
-          </div>
-        );
+              className="justify-content-center flex-column container-fluid"
+              id="app"
+            >
+              <h1 className="align-self-center text-white">
+                Markdown Previewer
+              </h1>
+              <textarea
+                className="rounded container-fluid min-vh-50 bg-primary text-white"
+                id="editor"
+                name="markdown"
+                value={this.state.text}
+                onChange={this.onChange}
+              ></textarea>
+              <div
+                className="rounded bg-light text-dark p-2"
+                id="preview"
+                onLoad={this.onChange}
+                dangerouslySetInnerHTML={{ __html: marked(this.state.text) }}
+              ></div>
+            </div>
+          );
+        }
       }
-    }
-    const placeholder = `# Markdown Previewer
+      const placeholder = `# Markdown Previewer
 ## This will preview markdown in Text format
 
 ### What is markdown?
@@ -135,8 +145,7 @@ code block
 
 ![Jon Cartee](https://i.imgur.com/4Vi5o9Z.jpg?1)`;
 
-    ReactDOM.render(<App />, document.getElementById("appWrap"));
-  </script>
-</body>
-
+      ReactDOM.render(<App />, document.getElementById("appWrap"));
+    </script>
+  </body>
 </html>

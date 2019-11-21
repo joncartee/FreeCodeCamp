@@ -1,242 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <title>Pomodoro Clock</title>
+    <link
+      rel="stylesheet"
+      href="https://style.j7c5.com/bootstrap-4.3.1-dist/css/bootstrap.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <meta charset="UTF-8" />
 
-<head>
-  <title>Pomodoro Clock</title>
-  <link rel="stylesheet" href="https://infallible-noether-f63348.netlify.com/bootstrap-4.3.1-dist/css/bootstrap.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <meta charset="UTF-8" />
+    <style></style>
+  </head>
 
-  <style>
-
-  </style>
-</head>
-
-<body>
-  <div class="row container-fluid d-flex flex-column min-vh-100 align-items-center bg-info justify-content-center"
-    id="appWrap">
-  </div>
-  <script type="text/babel">
-
-    (function () {
-      window.accurateInterval = function (fn, time) {
-        var cancel, nextAt, timeout, wrapper;
-        nextAt = new Date().getTime() + time;
-        timeout = null;
-        wrapper = function () {
-          nextAt += time;
+  <body>
+    <div
+      class="row container-fluid d-flex flex-column min-vh-100 align-items-center bg-info justify-content-center"
+      id="appWrap"
+    ></div>
+    <script type="text/babel">
+      (function() {
+        window.accurateInterval = function(fn, time) {
+          var cancel, nextAt, timeout, wrapper;
+          nextAt = new Date().getTime() + time;
+          timeout = null;
+          wrapper = function() {
+            nextAt += time;
+            timeout = setTimeout(wrapper, nextAt - new Date().getTime());
+            return fn();
+          };
+          cancel = function() {
+            return clearTimeout(timeout);
+          };
           timeout = setTimeout(wrapper, nextAt - new Date().getTime());
-          return fn();
+          return {
+            cancel: cancel
+          };
         };
-        cancel = function () {
-          return clearTimeout(timeout);
-        };
-        timeout = setTimeout(wrapper, nextAt - new Date().getTime());
-        return {
-          cancel: cancel
-        };
-      };
-    }).call(this);
+      }.call(this));
 
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            breakLength: 5,
+            sessionLength: 25,
+            active: false,
+            timerLabel: "Session",
+            timeLeft: 1500,
+            timerID: "",
+            bkg: "bg-primary"
+          };
 
-    class App extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = {
-          breakLength: 5,
-          sessionLength: 25,
-          active: false,
-          timerLabel: 'Session',
-          timeLeft: 1500,
-          timerID: '',
-          bkg: "bg-primary"
+          this.moreSession = this.moreSession.bind(this);
+          this.lessSession = this.lessSession.bind(this);
+          this.moreBreak = this.moreBreak.bind(this);
+          this.lessBreak = this.lessBreak.bind(this);
+
+          this.startstop = this.startstop.bind(this);
+
+          this.countdown = this.countdown.bind(this);
+          this.timerState = this.timerState.bind(this);
+
+          this.warn = this.warn.bind(this);
+          this.beep = this.beep.bind(this);
+          this.reset = this.reset.bind(this);
+          this.clocks = this.clocks.bind(this);
+        }
+        moreSession() {
+          console.log("Increased Session by 1");
+          let x = this.state.sessionLength;
+          this.setState({ sessionLength: this.lessThan(x) });
+        }
+        lessSession() {
+          console.log("Decreased Session by 1");
+          let x = this.state.sessionLength;
+          this.setState({ sessionLength: this.moreThan(x) });
+        }
+        moreBreak() {
+          console.log("Increased Break by 1");
+          let x = this.state.breakLength;
+          this.setState({ breakLength: this.lessThan(x) });
+        }
+        lessBreak() {
+          console.log("Decreased Break by 1");
+          let x = this.state.breakLength;
+          this.setState({ breakLength: this.moreThan(x) });
+        }
+        lessThan(x) {
+          return x < 60 ? x + 1 : 60;
+        }
+        moreThan(x) {
+          return x > 1 ? x - 1 : 1;
         }
 
-
-        this.moreSession = this.moreSession.bind(this);
-        this.lessSession = this.lessSession.bind(this);
-        this.moreBreak = this.moreBreak.bind(this);
-        this.lessBreak = this.lessBreak.bind(this);
-
-
-
-        this.startstop = this.startstop.bind(this);
-
-        this.countdown = this.countdown.bind(this);
-        this.timerState = this.timerState.bind(this);
-
-        this.warn = this.warn.bind(this);
-        this.beep = this.beep.bind(this);
-        this.reset = this.reset.bind(this);
-        this.clocks = this.clocks.bind(this);
-      }
-      moreSession() {
-        console.log("Increased Session by 1")
-        let x = this.state.sessionLength
-        this.setState({ sessionLength: this.lessThan(x) })
-      }
-      lessSession() {
-        console.log("Decreased Session by 1")
-        let x = this.state.sessionLength
-        this.setState({ sessionLength: this.moreThan(x) })
-      }
-      moreBreak() {
-        console.log("Increased Break by 1")
-        let x = this.state.breakLength
-        this.setState({ breakLength: this.lessThan(x) })
-      }
-      lessBreak() {
-        console.log("Decreased Break by 1")
-        let x = this.state.breakLength
-        this.setState({ breakLength: this.moreThan(x) })
-      }
-      lessThan(x) {
-        return x < 60 ? (x + 1) : 60
-      }
-      moreThan(x) {
-        return x > 1 ? (x - 1) : 1
-      }
-
-
-
-      startstop() {
-        clearInterval(this.timerID)
-        console.log("StartStop")
-        this.state.active == false ? (
-          this.setState({ active: true }),
-          this.countdown()
-        ) : (
-            this.setState({ active: false }),
-            this.state.timerID && this.state.timerID.cancel()
-          );
-      }
-
-
-      countdown() {
-        this.setState({
-          timerID: accurateInterval(() => {
-            this.setState({ timeLeft: this.state.timeLeft - 1 });
-            this.timerState();
-          }, 1000)
-        })
-      }
-
-      timerState() {
-        let timer = this.state.timeLeft;
-        this.state.bkg != "bg-danger" && timer <= 10 ? this.warn(timer) : ""
-        timer == 0 ? this.beep(timer) : ""
-        if (timer < 0) {
-          this.swap()
+        startstop() {
+          clearInterval(this.timerID);
+          console.log("StartStop");
+          this.state.active == false
+            ? (this.setState({ active: true }), this.countdown())
+            : (this.setState({ active: false }),
+              this.state.timerID && this.state.timerID.cancel());
         }
-      }
-      swap() {
-        this.state.timerLabel == 'Session' ? (
-          this.state.timerID && this.state.timerID.cancel(),
-          this.countdown(),
+
+        countdown() {
           this.setState({
-            timeLeft: this.state.breakLength * 60,
-            timerLabel: "Break",
-            bkg: "bg-success"
-          })
-        ) : (
-            this.state.timerID && this.state.timerID.cancel(),
-            this.countdown(),
-            this.setState({
-              timeLeft: this.state.sessionLength * 60,
-              timerLabel: "Session",
-              bkg: "bg-primary"
-            }))
-      }
+            timerID: accurateInterval(() => {
+              this.setState({ timeLeft: this.state.timeLeft - 1 });
+              this.timerState();
+            }, 1000)
+          });
+        }
 
-      reset() {
-        this.setState({
-          breakLength: 5,
-          sessionLength: 25,
-          active: false,
-          timerLabel: 'Session',
-          timeLeft: 1500,
-          timerID: '',
-          bkg: "bg-primary"
-        });
-        clearInterval(this.timer)
-        this.state.timerID && this.state.timerID.cancel();
-        this.audioBeep.pause();
-        this.audioBeep.currentTime = 0;
-      }
-      warn(x) {
-        this.state.bkg != "bg-danger" && x <= 10 ? this.setState({ bkg: "bg-danger" }) : ("")
-      }
-      beep(x) {
-        this.audioBeep.play();
-      }
-      clocks() {
-        let min = Math.floor(this.state.timeLeft / 60);
-        let sec = this.state.timeLeft - min * 60;
-        min = min.toString()
-        sec = sec.toString()
-        sec = sec.length < 2 ? '0' + sec : sec;
-        min = min.length < 2 ? '0' + min : min;
-        return (min + ':' + sec);
-      }
-      render() {
-        return (
-          <div id="app" className="align-items-center justify-content-center min-vw-75 " >
-            <div className=" justify-content-center" id="title"></div>
-            <div id="timer" className="justify-content-center" >
-              <div className="row justify-content-center  text-white  display-4" id="timer-label">
-                {this.state.timerLabel}
+        timerState() {
+          let timer = this.state.timeLeft;
+          this.state.bkg != "bg-danger" && timer <= 10 ? this.warn(timer) : "";
+          timer == 0 ? this.beep(timer) : "";
+          if (timer < 0) {
+            this.swap();
+          }
+        }
+        swap() {
+          this.state.timerLabel == "Session"
+            ? (this.state.timerID && this.state.timerID.cancel(),
+              this.countdown(),
+              this.setState({
+                timeLeft: this.state.breakLength * 60,
+                timerLabel: "Break",
+                bkg: "bg-success"
+              }))
+            : (this.state.timerID && this.state.timerID.cancel(),
+              this.countdown(),
+              this.setState({
+                timeLeft: this.state.sessionLength * 60,
+                timerLabel: "Session",
+                bkg: "bg-primary"
+              }));
+        }
+
+        reset() {
+          this.setState({
+            breakLength: 5,
+            sessionLength: 25,
+            active: false,
+            timerLabel: "Session",
+            timeLeft: 1500,
+            timerID: "",
+            bkg: "bg-primary"
+          });
+          clearInterval(this.timer);
+          this.state.timerID && this.state.timerID.cancel();
+          this.audioBeep.pause();
+          this.audioBeep.currentTime = 0;
+        }
+        warn(x) {
+          this.state.bkg != "bg-danger" && x <= 10
+            ? this.setState({ bkg: "bg-danger" })
+            : "";
+        }
+        beep(x) {
+          this.audioBeep.play();
+        }
+        clocks() {
+          let min = Math.floor(this.state.timeLeft / 60);
+          let sec = this.state.timeLeft - min * 60;
+          min = min.toString();
+          sec = sec.toString();
+          sec = sec.length < 2 ? "0" + sec : sec;
+          min = min.length < 2 ? "0" + min : min;
+          return min + ":" + sec;
+        }
+        render() {
+          return (
+            <div
+              id="app"
+              className="align-items-center justify-content-center min-vw-75 "
+            >
+              <div className=" justify-content-center" id="title"></div>
+              <div id="timer" className="justify-content-center">
+                <div
+                  className="row justify-content-center  text-white  display-4"
+                  id="timer-label"
+                >
+                  {this.state.timerLabel}
+                </div>
+                <div
+                  className={
+                    this.state.bkg +
+                    " row text-white justify-content-center align-items-center min-vh-25 display-1 border rounded"
+                  }
+                >
+                  <p id="time-left">{this.clocks()}</p>
+                </div>
               </div>
-              < div className={this.state.bkg + " row text-white justify-content-center align-items-center min-vh-25 display-1 border rounded"}  ><p id="time-left">{this.clocks()}</p></div>
+              <div className="row justify-content-between">
+                <div className="justify-content-center m-2">
+                  <div
+                    className="row title text-white justify-content-center"
+                    id="session-label"
+                  >
+                    Session Length
+                  </div>
+                  <div className="row d-flex flex-row justify-content-center">
+                    <button
+                      className="lengthControl btn btn-primary"
+                      id="session-decrement"
+                      onClick={this.lessSession}
+                    >
+                      <i className="fa fa-angle-down fa-2x" />
+                    </button>
+                    <div
+                      className="lengthControl m-2  text-white "
+                      id="session-length"
+                    >
+                      {this.state.sessionLength}
+                    </div>
+                    <button
+                      className="lengthControl btn btn-primary"
+                      id="session-increment"
+                      onClick={this.moreSession}
+                    >
+                      <i className="fa fa-angle-up fa-2x" />
+                    </button>
+                  </div>
+                </div>
+                <div className="justify-content-center m-2">
+                  <div className="title row text-white justify-content-center">
+                    Control
+                  </div>
+                  <div className="row d-flex flex-row  justify-content-center">
+                    <button
+                      type="button"
+                      className="btn btn-primary m-2 min-w-50"
+                      id="start_stop"
+                      onClick={this.startstop}
+                    >
+                      play/pause
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary m-2 min-w-50"
+                      id="reset"
+                      onClick={this.reset}
+                    >
+                      <i className="fa fa-retweet fa-2x " />
+                    </button>
+                  </div>
+                </div>
+                <div className="justify-content-center m-2">
+                  <div
+                    className="title row text-white justify-content-center"
+                    id="break-label"
+                  >
+                    Break Length
+                  </div>
+                  <div className="row d-flex flex-row  justify-content-center">
+                    <button
+                      className="lengthControl btn btn-primary"
+                      id="break-decrement"
+                      onClick={this.lessBreak}
+                    >
+                      <i className="fa fa-angle-down fa-2x " />
+                    </button>
+                    <div
+                      className="lengthControl text-white  m-2"
+                      id="break-length"
+                    >
+                      {this.state.breakLength}
+                    </div>
+                    <button
+                      className="lengthControl btn btn-primary"
+                      id="break-increment"
+                      onClick={this.moreBreak}
+                    >
+                      <i className="fa fa-angle-up fa-2x" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <audio
+                id="beep"
+                preload="auto"
+                src="https://goo.gl/65cBl1"
+                ref={audio => {
+                  this.audioBeep = audio;
+                }}
+              />
+              <div id="credit"></div>
             </div>
-            <div className="row justify-content-between">
-              <div className="justify-content-center m-2" >
-                <div className='row title text-white justify-content-center' id="session-label">
-                  Session Length
-              </div>
-                <div className="row d-flex flex-row justify-content-center">
-                  <button className="lengthControl btn btn-primary" id="session-decrement" onClick={this.lessSession}><i className="fa fa-angle-down fa-2x" /></button>
-                  <div className="lengthControl m-2  text-white " id="session-length">{this.state.sessionLength}</div>
-                  <button className="lengthControl btn btn-primary" id="session-increment" onClick={this.moreSession}><i className="fa fa-angle-up fa-2x" /></button>
-                </div>
-              </div>
-              <div className="justify-content-center m-2" >
-                <div className='title row text-white justify-content-center'>
-                  Control
-              </div>
-                <div className="row d-flex flex-row  justify-content-center">
-                  <button type="button" className="btn btn-primary m-2 min-w-50" id="start_stop" onClick={this.startstop}>play/pause
-                  </button>
-                  <button type="button" className="btn btn-primary m-2 min-w-50" id="reset" onClick={this.reset}><i className="fa fa-retweet fa-2x " /></button>
-                </div>
-              </div>
-              <div className="justify-content-center m-2" >
-                <div className='title row text-white justify-content-center' id="break-label">
-                  Break Length
-
-                </div>
-                <div className="row d-flex flex-row  justify-content-center">
-                  <button className="lengthControl btn btn-primary" id="break-decrement" onClick={this.lessBreak}><i className="fa fa-angle-down fa-2x " /></button>
-                  <div className="lengthControl text-white  m-2" id="break-length">{this.state.breakLength}</div>
-                  <button className="lengthControl btn btn-primary" id="break-increment" onClick={this.moreBreak}><i className="fa fa-angle-up fa-2x" /></button>
-                </div>
-              </div>
-            </div>
-
-            <audio id="beep" preload="auto"
-              src="https://goo.gl/65cBl1"
-              ref={(audio) => { this.audioBeep = audio; }} />
-            <div id="credit"></div>
-          </div >
-        )
+          );
+        }
       }
-    };
 
-    ReactDOM.render(<App />, document.getElementById('appWrap'));
-
-  </script>
-</body>
-
+      ReactDOM.render(<App />, document.getElementById("appWrap"));
+    </script>
+  </body>
 </html>

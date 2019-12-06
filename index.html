@@ -5,16 +5,44 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link
       rel="stylesheet"
       href="https://www.style.j7c5.com/bootstrap-4.3.1-dist/css/bootstrap.css"
       class=""
     />
+    <link href="https://fonts.googleapis.com/css?family=Baskervville&display=swap" rel="stylesheet">
     <meta charset="UTF-8" />
 
     <style class="">
-      body {
-        font-family: "Ubuntu", sans-serif;
+      body{
+        font-size:larger;
+
+      }
+      @font-face {
+        font-family: "Helvetica";
+        src: url("./assets/helvetica.otf");
+      }
+      h1 {
+        font-family: "Helvetica";
+        font-size:3em;
+      }
+      h2, h3, a{
+        font-family: "Baskervville";
+        font-size: 2em;
+      }
+      #appWrap{
+        background-image:urL("./assets/bkg.png")
+      }
+      #cert{
+        font-size:1em;
+
+      }
+      #app{
+        backdrop-filter:blur(5px); 
+      }
+      i, svg{
+        margin:10px;
       }
     </style>
   </head>
@@ -31,38 +59,37 @@
           this.state = {};
           this.onChange = this.onChange.bind(this);
         }
-
         onChange(e) {
           this.setstate({});
         }
-
         render() {
           return (
             <div
-              className="d-flex flex-column align-items-center border rounded min-vw-50 min-vh-50 justify-content-center"
+              className="p-5 d-flex flex-column align-items-center border rounded min-vw-50 min-vh-50 "
               id="app"
             >
-              <h1 className="row">Default Page for a React App. </h1>
-              <div className="row text-white">
-                <a className="p-2 text-white " href="/DrumMachine.html">
-                  Drum Machine
+              <h1 className="row ">FreeCodeCamp.org Projects </h1><br/>
+              <h2 className="row ">by Jon Cartee </h2><br/>
+              <h3 className="row "><a id="cert" href="https://www.freecodecamp.org/certification/jcartee/front-end-libraries">Front End Libaries Certification</a></h3><br/><br/>
+              <div className="row text-white flex-column d-flex">
+                <a className="p-2 text-white " href="./DrumMachine.html">
+                  <svg height="50px" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="drum" className="svg-inline--fa fa-drum fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M431.34 122.05l73.53-47.42a16 16 0 0 0 4.44-22.19l-8.87-13.31a16 16 0 0 0-22.19-4.44l-110.06 71C318.43 96.91 271.22 96 256 96 219.55 96 0 100.55 0 208.15v160.23c0 30.27 27.5 57.68 72 77.86v-101.9a24 24 0 1 1 48 0v118.93c33.05 9.11 71.07 15.06 112 16.73V376.39a24 24 0 1 1 48 0V480c40.93-1.67 78.95-7.62 112-16.73V344.34a24 24 0 1 1 48 0v101.9c44.5-20.18 72-47.59 72-77.86V208.15c0-43.32-35.76-69.76-80.66-86.1zM256 272.24c-114.88 0-208-28.69-208-64.09s93.12-64.08 208-64.08c17.15 0 33.73.71 49.68 1.91l-72.81 47a16 16 0 0 0-4.43 22.19l8.87 13.31a16 16 0 0 0 22.19 4.44l118.64-76.52C430.09 168 464 186.84 464 208.15c0 35.4-93.13 64.09-208 64.09z"></path></svg>Drum Machine
                 </a>
-                <a className="p-2 text-white" href="/RandomQuoteMachine.html">
-                  Random Quote Machine
+                <a className="p-2 text-white" href="./RandomQuoteMachine.html">
+                  <svg height="50px" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="quote-left" className="svg-inline--fa fa-quote-left fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M464 256h-80v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8c-88.4 0-160 71.6-160 160v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48zm-288 0H96v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8C71.6 32 0 103.6 0 192v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48z"></path></svg>Random Quote Machine
                 </a>
-                <a className="p-2 text-white" href="/MarkDown.html">
-                  Markdown
+                <a className="p-2 text-white" href="./MarkDown.html">
+                  <svg height="50px" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="markdown" className="svg-inline--fa fa-markdown fa-w-20" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M593.8 59.1H46.2C20.7 59.1 0 79.8 0 105.2v301.5c0 25.5 20.7 46.2 46.2 46.2h547.7c25.5 0 46.2-20.7 46.1-46.1V105.2c0-25.4-20.7-46.1-46.2-46.1zM338.5 360.6H277v-120l-61.5 76.9-61.5-76.9v120H92.3V151.4h61.5l61.5 76.9 61.5-76.9h61.5v209.2zm135.3 3.1L381.5 256H443V151.4h61.5V256H566z"></path></svg>Markdown
                 </a>
-                <a className="p-2 text-white" href="/Calc.html">
-                  Calculator
+                <a className="p-2 text-white" href="./Calc.html">
+                  <svg height="50px" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="calculator-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="svg-inline--fa fa-calculator-alt fa-w-16 fa-3x"><path fill="currentColor" d="M192 288H32c-17.67 0-32 14.33-32 32v160c0 17.67 14.33 32 32 32h160c17.67 0 32-14.33 32-32V320c0-17.67-14.33-32-32-32zm-29.09 140.29c3.12 3.12 3.12 8.19 0 11.31l-11.31 11.31c-3.12 3.12-8.19 3.12-11.31 0L112 422.63l-28.29 28.29c-3.12 3.12-8.19 3.12-11.31 0L61.09 439.6c-3.12-3.12-3.12-8.19 0-11.31L89.37 400l-28.29-28.29c-3.12-3.12-3.12-8.19 0-11.31l11.31-11.31c3.12-3.12 8.19-3.12 11.31 0l28.3 28.28 28.29-28.29c3.12-3.12 8.19-3.12 11.31 0l11.31 11.31c3.12 3.12 3.12 8.19 0 11.31L134.63 400l28.28 28.29zM480 0H320c-17.67 0-32 14.33-32 32v160c0 17.67 14.33 32 32 32h160c17.67 0 32-14.33 32-32V32c0-17.67-14.33-32-32-32zm-16 120c0 4.42-3.58 8-8 8h-40v40c0 4.42-3.58 8-8 8h-16c-4.42 0-8-3.58-8-8v-40h-40c-4.42 0-8-3.58-8-8v-16c0-4.42 3.58-8 8-8h40V56c0-4.42 3.58-8 8-8h16c4.42 0 8 3.58 8 8v40h40c4.42 0 8 3.58 8 8v16zm16 168H320c-17.67 0-32 14.33-32 32v160c0 17.67 14.33 32 32 32h160c17.67 0 32-14.33 32-32V320c0-17.67-14.33-32-32-32zm-16 152c0 4.42-3.58 8-8 8H344c-4.42 0-8-3.58-8-8v-16c0-4.42 3.58-8 8-8h112c4.42 0 8 3.58 8 8v16zm0-64c0 4.42-3.58 8-8 8H344c-4.42 0-8-3.58-8-8v-16c0-4.42 3.58-8 8-8h112c4.42 0 8 3.58 8 8v16zM192 0H32C14.33 0 0 14.33 0 32v160c0 17.67 14.33 32 32 32h160c17.67 0 32-14.33 32-32V32c0-17.67-14.33-32-32-32zm-16 120c0 4.42-3.58 8-8 8H56c-4.42 0-8-3.58-8-8v-16c0-4.42 3.58-8 8-8h112c4.42 0 8 3.58 8 8v16z" className=""></path></svg>Calculator
                 </a>
-                <a className="p-2 text-white" href="/pomodoroClock.html">
-                  Pomodoro Clock
+                <a className="p-2 text-white" href="./pomodoroClock.html">
+                  <svg height="50px" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="clock" className="svg-inline--fa fa-clock fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm57.1 350.1L224.9 294c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h48c6.6 0 12 5.4 12 12v137.7l63.5 46.2c5.4 3.9 6.5 11.4 2.6 16.8l-28.2 38.8c-3.9 5.3-11.4 6.5-16.8 2.6z"></path></svg>Pomodoro Clock
                 </a>
-                <a className="p-2 text-white" href="/CyberFixer.html">
-                  CyberFixer
-                </a>
+
               </div>
+
             </div>
           );
         }
